@@ -286,8 +286,7 @@
     const btnStart     = document.getElementById('btn-start');
     const btnPause     = document.getElementById('btn-pause');
     const adContainer  = document.getElementById('ad-container');
-
-    (adsbygoogle = window.adsbygoogle || []).push({});
+    let adInitialised  = false;
 
     const PHASE_COLORS = {
       green : '#1b5e20',
@@ -408,7 +407,12 @@
       const running = runState === 'running';
       btnStart.disabled = running;
       btnPause.disabled = !running;
-      adContainer.style.display = runState === 'stopped' ? 'block' : 'none';
+      const show = runState === 'stopped';
+      adContainer.style.display = show ? 'block' : 'none';
+      if (show && !adInitialised) {
+        adInitialised = true;
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      }
       minInput.disabled = running;
       secInput.disabled = running;
     }
