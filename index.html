@@ -75,7 +75,7 @@
     #timer-display .colon {
       display: inline-block;
       width: 1ch;
-      transform: translateX(60%) translateY(-19%) scale(1.5);
+      transform: translateX(60%) translateY(-15%) scale(1.5) scaleY(0.75);
     }
 
     .controls-wrapper {
@@ -152,9 +152,15 @@
       border-radius: 50%;
       cursor: pointer;
       font-size: 1rem;
+      line-height: 1;
       background: rgba(255, 255, 255, 0.18);
       color: white;
       transition: background 0.15s, transform 0.1s, opacity 0.2s, border-color 0.15s;
+    }
+
+    .btn span {
+      display: block;
+      line-height: 1;
     }
 
     .btn:focus-visible {
@@ -177,12 +183,52 @@
       cursor: not-allowed;
     }
 
+    #btn-pause {
+      font-size: 1.4rem;
+    }
+
     /* Start button is slightly larger — primary action */
     #btn-start {
       width: 3.8rem;
       height: 3.8rem;
-      font-size: 1.25rem;
+      font-size: 1.5rem;
       background: rgba(255, 255, 255, 0.25);
+    }
+
+    /* Portrait mobile: stack minutes and seconds, hide colon */
+    @media (orientation: portrait) and (max-width: 768px) {
+      #timer-display {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transform: none;
+        white-space: normal;
+      }
+
+      #timer-display .colon {
+        display: none;
+      }
+
+      #timer-display .mins,
+      #timer-display .secs {
+        display: block;
+      }
+    }
+
+    /* Landscape mobile: controls move to the right of the timer */
+    @media (orientation: landscape) and (max-height: 500px) {
+      body {
+        flex-direction: row;
+        gap: 2rem;
+        padding: 1rem 4rem;
+      }
+
+      .controls-wrapper {
+        position: static;
+        background: none;
+        padding: 0;
+        flex-shrink: 0;
+      }
     }
   </style>
 </head>
@@ -207,9 +253,9 @@
       <input id="sec-input" type="number" min="0" max="59" value="00" aria-label="Seconds">
     </div>
     <div class="buttons">
-      <button class="btn" id="btn-stop"  aria-label="Stop">&#9646;</button>
-      <button class="btn" id="btn-start" aria-label="Start">&#9654;</button>
-      <button class="btn" id="btn-pause" aria-label="Pause" disabled>&#9646;&#9646;</button>
+      <button class="btn" id="btn-stop"  aria-label="Stop"><span aria-hidden="true">⏹</span></button>
+      <button class="btn" id="btn-start" aria-label="Start"><span aria-hidden="true">▶</span></button>
+      <button class="btn" id="btn-pause" aria-label="Pause" disabled><span aria-hidden="true">⏸</span></button>
     </div>
   </div>
 
@@ -287,9 +333,22 @@
 
     /* ── UI updates ──────────────────────────────────────── */
 
+    const landscapeQuery = window.matchMedia('(orientation: landscape) and (max-height: 500px)');
+    const portraitQuery  = window.matchMedia('(orientation: portrait) and (max-width: 768px)');
+
     function fitText() {
       display.style.fontSize = '100px';
-      const scale = (window.innerWidth * 0.75) / display.scrollWidth;
+      const isPortrait = portraitQuery.matches;
+      const availableWidth = landscapeQuery.matches
+        ? window.innerWidth * 0.45
+        : window.innerWidth * 0.75;
+      const scaleW = availableWidth / display.scrollWidth;
+      let scale = scaleW;
+      if (isPortrait) {
+        // Two stacked numbers — constrain by height too (60% of viewport)
+        const scaleH = (window.innerHeight * 0.60) / display.scrollHeight;
+        scale = Math.min(scaleW, scaleH);
+      }
       display.style.fontSize = (100 * scale) + 'px';
     }
 
@@ -305,7 +364,10 @@
       const text  = formatTime(remaining);
       const phase = getPhase();
 
-      display.innerHTML = text.replace(':', '<span class="colon">:</span>');
+      const colonIdx = text.indexOf(':');
+      const mins = text.slice(0, colonIdx);
+      const secs = text.slice(colonIdx + 1);
+      display.innerHTML = `<span class="mins">${mins}</span><span class="colon">:</span><span class="secs">${secs}</span>`;
       display.setAttribute('aria-label', spokenTime(remaining));
       document.body.style.backgroundColor = PHASE_COLORS[phase];
 
@@ -389,6 +451,8 @@
     secInput.addEventListener('change', onDurationChange);
 
     window.addEventListener('resize', fitText);
+    landscapeQuery.addEventListener('change', fitText);
+    portraitQuery.addEventListener('change', fitText);
     document.fonts.ready.then(fitText);
 
     /* ── init ────────────────────────────────────────────── */
