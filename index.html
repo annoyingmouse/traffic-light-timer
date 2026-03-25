@@ -218,13 +218,40 @@
       }
     }
 
+    #page-content {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 1rem 1.5rem;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    #page-content h1 {
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      font-weight: bold;
+      letter-spacing: 0.05em;
+      opacity: 0.85;
+      margin-bottom: 0.35rem;
+    }
+
+    #page-content p {
+      font-size: clamp(0.75rem, 1.8vw, 1rem);
+      opacity: 0.7;
+      max-width: 55ch;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
     #ad-container {
       margin-bottom: 0.75rem;
     }
 
     /* Landscape mobile: controls move to the right of the timer */
     @media (orientation: landscape) and (max-height: 500px) {
-      #ad-container {
+      #ad-container,
+      #page-content {
         display: none !important;
       }
       body {
@@ -246,6 +273,11 @@
 
   <!-- Live region: announces phase changes to screen readers -->
   <div id="live-region" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+
+  <header id="page-content">
+    <h1>Traffic Light Timer</h1>
+    <p>A full-screen countdown timer that changes colour as time runs out — green while you have plenty of time, amber for the last minute, and red when time is up. Perfect for meetings, presentations, classrooms and workshops.</p>
+  </header>
 
   <div
     id="timer-display"
@@ -287,6 +319,7 @@
     const btnStart     = document.getElementById('btn-start');
     const btnPause     = document.getElementById('btn-pause');
     const adContainer  = document.getElementById('ad-container');
+    const pageContent  = document.getElementById('page-content');
     let adInitialised  = false;
 
     const PHASE_COLORS = {
@@ -410,6 +443,7 @@
       btnPause.disabled = !running;
       const show = runState === 'stopped';
       adContainer.style.display = show ? 'block' : 'none';
+      pageContent.style.display = show ? 'block' : 'none';
       if (show && !adInitialised) {
         adInitialised = true;
         (window.adsbygoogle = window.adsbygoogle || []).push({});
