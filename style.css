@@ -1,0 +1,258 @@
+@font-face {
+  font-family: "PanopticMonospace";
+  src: url("PanopticMonospace-Bold.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: "Courier New", Courier, monospace;
+  background-color: #1b5e20;
+  overflow: hidden;
+  color: white;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  body {
+    transition: background-color 1s ease;
+  }
+}
+
+/* Visually hidden but available to screen readers */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+#timer-display {
+  font-size: 10vw; /* overridden by fitText() */
+  font-family: "PanopticMonospace", "Courier New", monospace;
+  line-height: 0.85;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+  letter-spacing: -0.04em;
+  user-select: none;
+  white-space: nowrap;
+  transform: scaleY(2);
+  display: inline-block;
+}
+
+#timer-display .colon {
+  display: inline-block;
+  width: 1ch;
+  transform: translateX(60%) translateY(-15%) scale(1.5) scaleY(0.75);
+}
+
+.controls-wrapper {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.25rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.25));
+}
+
+.duration-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 1.4rem;
+}
+
+.duration-row input {
+  width: 3.2rem;
+  padding: 0.25rem 0.3rem;
+  font-size: 1.4rem;
+  font-family: inherit;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 6px;
+  color: white;
+  -moz-appearance: textfield;
+  appearance: textfield;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
+}
+
+.duration-row input:focus {
+  outline: 3px solid white;
+  outline-offset: 2px;
+  border-color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.duration-row input:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.duration-row input::-webkit-inner-spin-button,
+.duration-row input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+.duration-row .sep {
+  font-size: 1.8rem;
+  opacity: 0.7;
+  line-height: 1;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  background: rgba(255, 255, 255, 0.18);
+  color: white;
+  transition:
+    background 0.15s,
+    transform 0.1s,
+    opacity 0.2s,
+    border-color 0.15s;
+}
+
+.btn span {
+  display: block;
+  line-height: 1;
+}
+
+.btn:focus-visible {
+  outline: 3px solid white;
+  outline-offset: 3px;
+}
+
+.btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.32);
+  border-color: rgba(255, 255, 255, 0.75);
+  transform: scale(1.08);
+}
+
+.btn:active:not(:disabled) {
+  transform: scale(0.93);
+}
+
+.btn:disabled {
+  opacity: 0.28;
+  cursor: not-allowed;
+}
+
+#btn-pause {
+  font-size: 1.4rem;
+}
+
+/* Start button is slightly larger — primary action */
+#btn-start {
+  width: 3.8rem;
+  height: 3.8rem;
+  font-size: 1.5rem;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Portrait mobile: stack minutes and seconds, hide colon */
+@media (orientation: portrait) and (max-width: 768px) {
+  #timer-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: none;
+    white-space: normal;
+  }
+
+  #timer-display .colon {
+    display: none;
+  }
+
+  #timer-display .mins,
+  #timer-display .secs {
+    display: block;
+  }
+}
+
+#page-content {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem 1.5rem;
+  text-align: center;
+  pointer-events: none;
+}
+
+#page-content h1 {
+  font-size: clamp(1rem, 2.5vw, 1.4rem);
+  font-weight: bold;
+  letter-spacing: 0.05em;
+  opacity: 0.85;
+  margin-bottom: 0.35rem;
+}
+
+#page-content p {
+  font-size: clamp(0.75rem, 1.8vw, 1rem);
+  opacity: 0.7;
+  max-width: 55ch;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+#ad-container {
+  margin-bottom: 0.75rem;
+}
+
+/* Landscape mobile: controls move to the right of the timer */
+@media (orientation: landscape) and (max-height: 500px) {
+  #ad-container,
+  #page-content {
+    display: none !important;
+  }
+  body {
+    flex-direction: row;
+    gap: 2rem;
+    padding: 1rem 4rem;
+  }
+
+  .controls-wrapper {
+    position: static;
+    background: none;
+    padding: 0;
+    flex-shrink: 0;
+  }
+}
