@@ -446,7 +446,9 @@
       pageContent.style.display = show ? 'block' : 'none';
       if (show && !adInitialised) {
         adInitialised = true;
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
+        requestAnimationFrame(() => {
+          (window.adsbygoogle = window.adsbygoogle || []).push({});
+        });
       }
       minInput.disabled = running;
       secInput.disabled = running;
