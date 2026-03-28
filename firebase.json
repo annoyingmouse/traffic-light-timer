@@ -6,7 +6,10 @@
       "**/.*",
       "**/node_modules/**",
       "README.md",
-      "CLAUDE.md"
+      "CLAUDE.md",
+      "biome.json",
+      "package.json",
+      "package-lock.json"
     ]
   }
 }

@@ -5,9 +5,7 @@ const secInput = document.getElementById("sec-input");
 const btnStop = document.getElementById("btn-stop");
 const btnStart = document.getElementById("btn-start");
 const btnPause = document.getElementById("btn-pause");
-const adContainer = document.getElementById("ad-container");
 const pageContent = document.getElementById("page-content");
-let adInitialised = false;
 
 const PHASE_COLORS = {
   green: "#1b5e20",
@@ -134,16 +132,7 @@ function syncButtons() {
   const running = runState === "running";
   btnStart.disabled = running;
   btnPause.disabled = !running;
-  const show = runState === "stopped";
-  adContainer.style.display = show ? "block" : "none";
-  pageContent.style.display = show ? "block" : "none";
-  if (show && !adInitialised) {
-    adInitialised = true;
-    requestAnimationFrame(() => {
-      window.adsbygoogle = window.adsbygoogle || [];
-      window.adsbygoogle.push({});
-    });
-  }
+  pageContent.style.display = runState === "stopped" ? "block" : "none";
   minInput.disabled = running;
   secInput.disabled = running;
 }

@@ -233,13 +233,38 @@ body {
   line-height: 1.5;
 }
 
-#ad-container {
-  margin-bottom: 0.75rem;
+.kofi-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  margin-top: 0.75rem;
+  padding: 0.4em 1em;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 2em;
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+  font-family: inherit;
+  font-size: clamp(0.75rem, 1.6vw, 0.95rem);
+  text-decoration: none;
+  pointer-events: auto;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+}
+
+.kofi-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.8);
+}
+
+.kofi-btn img {
+  width: 1.2em;
+  height: 1.2em;
+  filter: brightness(0) invert(1);
 }
 
 /* Landscape mobile: controls move to the right of the timer */
 @media (orientation: landscape) and (max-height: 500px) {
-  #ad-container,
   #page-content {
     display: none !important;
   }
