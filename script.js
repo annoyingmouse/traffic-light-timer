@@ -24,6 +24,8 @@ let remaining = totalSeconds;
 let intervalId = null;
 let runState = "stopped"; // 'stopped' | 'running' | 'paused'
 let lastPhase = "green";
+let startTime = null;      // Date.now() when the timer last started/resumed
+let remainingAtStart = 0;  // remaining value at that moment
 
 /* ── helpers ─────────────────────────────────────────── */
 
@@ -140,7 +142,7 @@ function syncButtons() {
 /* ── timer logic ─────────────────────────────────────── */
 
 function tick() {
-  remaining--;
+  remaining = remainingAtStart - Math.floor((Date.now() - startTime) / 1000);
   render();
 }
 
@@ -163,6 +165,8 @@ function start() {
     if (remaining <= 0) return;
   }
   runState = "running";
+  startTime = Date.now();
+  remainingAtStart = remaining;
   clearInterval(intervalId);
   intervalId = setInterval(tick, 1000);
   render();
