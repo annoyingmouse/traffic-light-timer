@@ -1,3 +1,6 @@
+const BPM_MODE = new URLSearchParams(location.search).get('type') === 'bpm';
+if (BPM_MODE) document.body.classList.add('bpm-mode');
+
 const display = document.getElementById("timer-display");
 const liveRegion = document.getElementById("live-region");
 const minInput = document.getElementById("min-input");
@@ -13,6 +16,12 @@ const PHASE_COLORS = {
   red: "#b71c1c",
 };
 
+const PHASE_BPM_SEGMENTS = {
+  green: { fill: "#b9f6ca", stroke: "#ccff90" },
+  amber: { fill: "#fff9c4", stroke: "#ffffff" },
+  red:   { fill: "#efc100", stroke: "#fff176" },
+};
+
 const PHASE_LABELS = {
   green: null, // no announcement when starting/resuming green phase
   amber: "Less than one minute remaining",
@@ -20,6 +29,7 @@ const PHASE_LABELS = {
 };
 
 let totalSeconds = 5 * 60;
+let colonOn = true;
 let remaining = totalSeconds;
 let intervalId = null;
 let runState = "stopped"; // 'stopped' | 'running' | 'paused'
@@ -114,9 +124,23 @@ function render() {
   const colonIdx = text.indexOf(":");
   const mins = text.slice(0, colonIdx);
   const secs = text.slice(colonIdx + 1);
-  display.innerHTML = `<span class="mins">${mins}</span><span class="colon">:</span><span class="secs">${secs}</span>`;
+  if (BPM_MODE) {
+    const g = ch => `<bpm-glyph char="${ch}" aria-hidden="true"></bpm-glyph>`;
+    display.innerHTML =
+      `<span class="mins">${[...mins].map(g).join('')}</span>` +
+      `<span class="colon">${g(colonOn ? ':' : ' ')}</span>` +
+      `<span class="secs">${[...secs].map(g).join('')}</span>`;
+  } else {
+    display.innerHTML = `<span class="mins">${mins}</span><span class="colon">:</span><span class="secs">${secs}</span>`;
+  }
   display.setAttribute("aria-label", spokenTime(remaining));
   document.body.style.backgroundColor = PHASE_COLORS[phase];
+  if (BPM_MODE) {
+    const { fill, stroke } = PHASE_BPM_SEGMENTS[phase];
+    document.body.style.setProperty('--bpm-background', PHASE_COLORS[phase]);
+    document.body.style.setProperty('--bpm-fill', fill);
+    document.body.style.setProperty('--bpm-stroke', stroke);
+  }
 
   if (text.length !== lastTextLength) {
     lastTextLength = text.length;
@@ -143,6 +167,7 @@ function syncButtons() {
 
 function tick() {
   remaining = remainingAtStart - Math.floor((Date.now() - startTime) / 1000);
+  if (BPM_MODE) colonOn = !colonOn;
   render();
 }
 
@@ -150,6 +175,7 @@ function stop() {
   clearInterval(intervalId);
   intervalId = null;
   runState = "stopped";
+  colonOn = true;
   totalSeconds = getDuration();
   remaining = totalSeconds;
   lastPhase = "green";
@@ -179,6 +205,7 @@ function pause() {
   clearInterval(intervalId);
   intervalId = null;
   runState = "paused";
+  colonOn = true;
   syncButtons();
   announce("Timer paused");
 }
@@ -212,3 +239,4 @@ document.fonts.ready.then(fitText);
 
 render();
 syncButtons();
+if (BPM_MODE) customElements.whenDefined('bpm-glyph').then(fitText);
