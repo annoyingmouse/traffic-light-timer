@@ -1,0 +1,122 @@
+/* Override sakura-dark theme tokens to match the VFD aesthetic */
+:root {
+  --color-bg: #0a0a0f;
+  --color-bg-secondary: #13131a;
+  --color-text: #aab;
+  --color-text-secondary: #667;
+  --color-blossom: #76d0c6;
+}
+
+/* Layout */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 0;
+}
+
+bpm-glyph {
+  width: 52px;
+}
+
+/* Section headings used as display labels */
+h2 {
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  border: none;
+  margin: 2.5rem 0 0.75rem;
+  padding: 0;
+  color: var(--color-text-secondary);
+}
+
+/* Colour palette demo */
+.colours {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.colours .row {
+  align-items: center;
+}
+.colours bpm-glyph {
+  width: 48px;
+}
+.colours label {
+  display: inline-block;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  width: 6rem;
+  flex-shrink: 0;
+  color: var(--color-text-secondary);
+}
+
+.amber { --bpm-fill: #ffb300; --bpm-stroke: #ffe082; --bpm-background: #110900; }
+.green { --bpm-fill: #69f080; --bpm-stroke: #b9f6ca; --bpm-background: #00110a; }
+.red   { --bpm-fill: #ff5252; --bpm-stroke: #ff8a80; --bpm-background: #110000; }
+.white { --bpm-fill: #e0e0e0; --bpm-stroke: #ffffff; --bpm-background: #111111; }
+
+/* Interactive input */
+#text-input {
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+  width: 100%;
+  max-width: 480px;
+}
+
+#text-display bpm-glyph {
+  width: 48px;
+}
+
+/* Segment editor */
+.editor {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.editor bpm-glyph {
+  width: 96px;
+}
+
+.editor-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.editor-controls button {
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  padding: 0.3em 0.6em;
+  background: var(--color-bg-secondary);
+  border: 1px solid #333;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  border-radius: 3px;
+  transition: background 0.1s, color 0.1s;
+}
+
+.editor-controls button.on {
+  background: #76d0c622;
+  border-color: #76d0c6;
+  color: #76d0c6;
+}
+
+#editor-output {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* Scrolling demo */
+.demo-text {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.demo-text bpm-glyph {
+  width: 40px;
+}

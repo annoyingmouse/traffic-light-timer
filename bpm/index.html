@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BPM Glyph</title>
+  <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura-dark.css">
+  <link rel="stylesheet" href="index.css">
+  <script type="module" src="../bpm-glyph.js"></script>
+  <script type="module" src="index.js"></script>
+</head>
+<body>
+<main>
+
+  <h1>BPM Glyph</h1>
+  <p>A 16-segment VFD-style web component.</p>
+
+  <h2>A – Z</h2>
+  <div class="row" id="letters"></div>
+  <div class="row" id="letters-lower"></div>
+
+  <h2>0 – 9</h2>
+  <div class="row" id="digits"></div>
+
+  <h2>Punctuation</h2>
+  <div class="row" id="punctuation"></div>
+
+  <h2>Colours</h2>
+  <div class="colours">
+    <div class="row">
+      <label>Default</label>
+      <div class="row" id="col-default"></div>
+    </div>
+    <div class="row amber">
+      <label>Amber</label>
+      <div class="row" id="col-amber"></div>
+    </div>
+    <div class="row green">
+      <label>Green</label>
+      <div class="row" id="col-green"></div>
+    </div>
+    <div class="row red">
+      <label>Red</label>
+      <div class="row" id="col-red"></div>
+    </div>
+    <div class="row white">
+      <label>White</label>
+      <div class="row" id="col-white"></div>
+    </div>
+  </div>
+
+  <h2>Try it</h2>
+  <input type="text" id="text-input" placeholder="Type something…" autocomplete="off" spellcheck="false">
+  <div class="row" id="text-display" aria-live="polite" aria-label="Live glyph preview"></div>
+
+  <h2>Segment editor</h2>
+  <div class="editor">
+    <bpm-glyph id="editor-glyph" segments="" aria-label="Segment editor preview"></bpm-glyph>
+    <div class="editor-controls" id="editor-controls"></div>
+    <pre id="editor-output">[]</pre>
+  </div>
+
+  <h2>Clock</h2>
+  <div class="row" id="clock" role="timer" aria-live="off"></div>
+
+  <h2>Demo</h2>
+  <div class="demo-text" id="demo" aria-label="Scrolling demo display" aria-live="off"></div>
+
+</main>
+</body>
+</html>
