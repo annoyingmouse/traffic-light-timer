@@ -263,6 +263,18 @@ body {
   filter: brightness(0) invert(1);
 }
 
+/* BPM glyph mode overrides */
+.bpm-mode #timer-display .colon {
+  width: auto;
+  transform: none;
+}
+
+.bpm-mode #timer-display {
+  transform: none;
+  line-height: 1;
+  font-size: 10vw; /* reset baseline; fitText() will override */
+}
+
 /* Landscape mobile: controls move to the right of the timer */
 @media (orientation: landscape) and (max-height: 500px) {
   #page-content {
