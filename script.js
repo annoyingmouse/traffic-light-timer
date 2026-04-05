@@ -144,7 +144,7 @@ function render() {
 
   const startIcon = btnStart.querySelector("i");
   if (remaining <= 0) {
-    startIcon.className = "fa-sharp fa-solid fa-stopwatch fa-shake";
+    startIcon.className = "fa-sharp fa-solid fa-bell fa-shake fa-beat";
   } else {
     startIcon.className = "fa-sharp fa-solid fa-play";
   }
