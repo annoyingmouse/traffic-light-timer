@@ -142,6 +142,13 @@ function render() {
     document.body.style.setProperty('--bpm-stroke', stroke);
   }
 
+  const startIcon = btnStart.querySelector("i");
+  if (remaining <= 0) {
+    startIcon.className = "fa-sharp fa-solid fa-stopwatch fa-shake";
+  } else {
+    startIcon.className = "fa-sharp fa-solid fa-play";
+  }
+
   if (text.length !== lastTextLength) {
     lastTextLength = text.length;
     fitText();
