@@ -143,7 +143,7 @@ function render() {
   }
 
   const startIcon = btnStart.querySelector("i");
-  if (remaining <= 0) {
+  if (runState === "running" && remaining <= 0) {
     startIcon.className = "fa-sharp fa-solid fa-bell fa-shake";
   } else {
     startIcon.className = "fa-sharp fa-solid fa-play";
